@@ -1,4 +1,4 @@
-require './multimin'
+require './minimize'
 
 my_f = Proc.new do |v, params|
   x = v[0]
@@ -17,5 +17,5 @@ my_df = Proc.new do |v, params, df|
   df[1] = 40.0*(y-p1)
 end
 
-m = Multimin.new(my_f, [1.0, 2.0], my_df)
+m = Minimize.new(my_f, [1.0, 2.0], my_df)
 m.minimize(5.0, 7.0)

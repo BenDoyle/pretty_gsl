@@ -1,11 +1,11 @@
 require 'gsl'
 #require 'debug'
 
-class Multimin
+class Mimimize
   include GSL
   include GSL::MultiMin
 
-  def initialize(loss, constants = [], gradient = nil)
+  def initialize(loss, constants, gradient = nil)
     @loss      = loss
     @gradient  = gradient
     @constants = constants
@@ -32,3 +32,4 @@ class Multimin
     end while status == GSL::CONTINUE and iter < 100
   end
 end
+
