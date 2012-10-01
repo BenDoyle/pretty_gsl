@@ -17,10 +17,9 @@ loss_gradient = Proc.new do |variables, constants, gradient_components|
   gradient_components[1] = 40.0*(y-p1)
 end
 
-guess = [1.0, 2.0]
+constants = [1.0, 2.0]
+guess     = [5.0, 7.0]
 
-puts Minimize.new(loss, guess, loss_gradient: loss_gradient).minimize(5.0, 7.0)
-
-
-puts Minimize.new(loss, guess).minimize(5.0, 7.0)
+puts Minimize.new(loss, constants, loss_gradient: loss_gradient).minimize(*guess)
+puts Minimize.new(loss, constants).minimize(*guess)
 
