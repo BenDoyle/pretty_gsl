@@ -21,3 +21,6 @@ guess = [1.0, 2.0]
 
 puts Minimize.new(loss, guess, loss_gradient: loss_gradient).minimize(5.0, 7.0)
 
+
+puts Minimize.new(loss, guess).minimize(5.0, 7.0)
+
