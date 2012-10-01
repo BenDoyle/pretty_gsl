@@ -11,21 +11,19 @@ class Minimize
     @loss            = loss
     @constants       = constants
     @params = {
-      max_iterations:               100,
-      step_size:                    0.01,
-      tolerance:                    1e-4,
-      absolute_gradient_tolerance:  1e-3,
+      max_iterations:               100,  # the maximum number of iterations to carry out the minimization
+      step_size:                    0.01, # initial guess of the length scale of the minimiztion steps
+      direction_tolerance:          1e-4, # the tolerance for errors in the direction of line minimization
+      absolute_gradient_tolerance:  1e-3, # halt if the magnetude of the gradient falls below this value
     }.merge(options)
   end
 
   def minimize(*guess)
-    my_func = Function_fdf.alloc(@loss, @params[:gradient], guess.size)
-    my_func.set_params(@constants)      # parameters
-
-    x = Vector.alloc(*guess)          # starting point
-
+    loss = Function_fdf.alloc(@loss, @params[:gradient], guess.size)
+    loss.set_params(@constants)
+    x = Vector.alloc(*guess)
     minimizer = FdfMinimizer.alloc("conjugate_fr", guess.size)
-    minimizer.set(my_func, x, @params[:step_size], @params[:tolerance])
+    minimizer.set(loss, x, @params[:step_size], @params[:direction_tolerance])
 
     iter = 0
     begin
