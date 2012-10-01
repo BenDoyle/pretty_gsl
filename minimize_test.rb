@@ -1,21 +1,23 @@
 require './minimize'
 
-my_f = Proc.new do |v, params|
-  x = v[0]
-  y = v[1]
-  p0 = params[0]
-  p1 = params[1]
+loss = Proc.new do |variables, constants|
+  x = variables[0]
+  y = variables[1]
+  p0 = constants[0]
+  p1 = constants[1]
   10.0 * (x - p0) * (x - p0) + 20.0 * (y - p1) * (y - p1) + 30.0
 end
 
-my_df = Proc.new do |v, params, df|
-  x = v[0]
-  y = v[1]
-  p0 = params[0]
-  p1 = params[1]
-  df[0] = 20.0*(x-p0)
-  df[1] = 40.0*(y-p1)
+loss_gradient = Proc.new do |variables, constants, gradient_components|
+  x = variables[0]
+  y = variables[1]
+  p0 = constants[0]
+  p1 = constants[1]
+  gradient_components[0] = 20.0*(x-p0)
+  gradient_components[1] = 40.0*(y-p1)
 end
 
-m = Minimize.new(my_f, [1.0, 2.0], gradient: my_df)
-m.minimize(5.0, 7.0)
+guess = [1.0, 2.0]
+
+puts Minimize.new(loss, guess, loss_gradient: loss_gradient).minimize(5.0, 7.0)
+
