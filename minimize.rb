@@ -6,6 +6,7 @@ class Minimize
   include GSL::MultiMin
 
   attr_accessor :verbose
+  attr_reader :result
 
   def initialize(loss, constants, options = {})
     @loss            = loss
@@ -16,25 +17,30 @@ class Minimize
       direction_tolerance:          1e-4, # the tolerance for errors in the direction of line minimization
       absolute_gradient_tolerance:  1e-3, # halt if the magnetude of the gradient falls below this value
     }.merge(options)
+    @result = nil
+    self
   end
 
   def minimize(*guess)
-    loss = Function_fdf.alloc(@loss, @params[:gradient], guess.size)
+    loss = Function_fdf.alloc(@loss, @params[:loss_gradient], guess.size)
     loss.set_params(@constants)
     x = Vector.alloc(*guess)
     minimizer = FdfMinimizer.alloc("conjugate_fr", guess.size)
     minimizer.set(loss, x, @params[:step_size], @params[:direction_tolerance])
-
-    iter = 0
-    begin
-      iter += 1
-      status = minimizer.iterate()
-      status = minimizer.test_gradient(@params[:absolute_gradient_tolerance])
-      puts("Minimum found at") if status == GSL::SUCCESS
-      x = minimizer.x
-      f = minimizer.f
-      printf("%5d %.5f %.5f %10.5f\n", iter, x[0], x[1], f)
-    end while status == GSL::CONTINUE and iter < @params[:max_iterations]
+    @params[:max_iterations].times do |iter|
+      status = minimizer.iterate
+      status = minimizer.test_gradient @params[:absolute_gradient_tolerance]
+      if status != CONTINUE
+        @result = {
+          success:    status == SUCCESS,
+          minimum_x:  minimizer.x.to_a,
+          minimum_f:  f = minimizer.f,
+          iterations: iter
+        }
+        break
+      end
+    end
+    @result
   end
 end
 
