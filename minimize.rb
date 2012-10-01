@@ -11,10 +11,10 @@ class Minimize
     @loss            = loss
     @constants       = constants
     @params = {
-      max_iterations: 100,
-      foo:            0.01,
-      bar:            1e-4,
-      baz:            1e-3,
+      max_iterations:               100,
+      step_size:                    0.01,
+      tolerance:                    1e-4,
+      absolute_gradient_tolerance:  1e-3,
     }.merge(options)
   end
 
@@ -25,13 +25,13 @@ class Minimize
     x = Vector.alloc(*guess)          # starting point
 
     minimizer = FdfMinimizer.alloc("conjugate_fr", guess.size)
-    minimizer.set(my_func, x, @params[:foo], @params[:bar])
+    minimizer.set(my_func, x, @params[:step_size], @params[:tolerance])
 
     iter = 0
     begin
       iter += 1
       status = minimizer.iterate()
-      status = minimizer.test_gradient(@params[:baz])
+      status = minimizer.test_gradient(@params[:absolute_gradient_tolerance])
       puts("Minimum found at") if status == GSL::SUCCESS
       x = minimizer.x
       f = minimizer.f
