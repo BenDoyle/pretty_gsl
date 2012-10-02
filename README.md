@@ -18,13 +18,13 @@ Or install it yourself as:
 
 ## Usage
 
-  function          = Proc.new{ |variables, constants| ...}
-  optional_gradient = Proc.new{ |variables, constants, gradient_components| ...}
-  constants = [1,2,3, ...]
-  guess = [1,2,3, ...]
-  m = Minimizer.new(function, constants, function_gradient: optional_gradient)
-  m.minimize(*guess)
-  => {:success=>true, :minimum_x=>[1, 2], :iterations=>50, :minimum_f=>30.0, :simplex_size=>0.0008 ... }
+`function          = Proc.new{ |variables, constants| ...}
+optional_gradient = Proc.new{ |variables, constants, gradient_components| ...}
+constants = [1,2,3, ...]
+guess = [1,2,3, ...]
+m = Minimizer.new(function, constants, function_gradient: optional_gradient)
+m.minimize(*guess)
+=> {:success=>true, :minimum_x=>[1, 2], :iterations=>50, :minimum_f=>30.0, :simplex_size=>0.0008 ... }`
 
 ## Contributing
 
