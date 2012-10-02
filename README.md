@@ -1,6 +1,6 @@
 # PrettyGLS
 
-This gem provides a nice interface to the GNU scientific library through the Ruby/GSL wrapper. I've simply attempted to update the interface to use more idiomatic ruby.
+This gem provides a nice interface to the <a href = 'http://rb-gsl.rubyforge.org/'>GNU scientific library</a> through the <a href = 'http://www.gnu.org/software/gsl/manual/html_node/'>Ruby/GSL</a> wrapper. I've simply attempted to update the interface to use more idiomatic ruby.
 
 ## Installation
 
