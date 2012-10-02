@@ -1,4 +1,4 @@
-module Minimize
+module PrettyGSL
   class Minimize
     include GSL
     include GSL::MultiMin
