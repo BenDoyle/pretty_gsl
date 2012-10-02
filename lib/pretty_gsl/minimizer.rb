@@ -5,8 +5,8 @@ module PrettyGSL
 
     attr_reader :result
 
-    def initialize(loss, constants, options = {})
-      @loss            = loss
+    def initialize(function, constants, options = {})
+      @function            = function
       @constants       = constants
       @params = {
         max_iterations:               100,  # the maximum number of iterations to carry out the minimization
@@ -37,7 +37,7 @@ module PrettyGSL
 
     protected
     def test_gsl_convergence(minimizer)
-      if @params[:loss_gradient]
+      if @params[:function_gradient]
         minimizer.test_gradient @params[:absolute_gradient_tolerance]
       else
         minimizer.test_size @params[:absolute_gradient_tolerance]
@@ -46,24 +46,24 @@ module PrettyGSL
 
     def get_gsl_minimizer(guess)
       minimizer = nil
-      if @params[:loss_gradient]
-        loss = Function_fdf.alloc(@loss, @params[:loss_gradient], guess.size)
-        loss.set_params(@constants)
+      if @params[:function_gradient]
+        function = Function_fdf.alloc(@function, @params[:function_gradient], guess.size)
+        function.set_params(@constants)
         minimizer = FdfMinimizer.alloc("conjugate_fr", guess.size)
-        minimizer.set(loss, Vector.alloc(*guess), @params[:step_size], @params[:direction_tolerance])
+        minimizer.set(function, Vector.alloc(*guess), @params[:step_size], @params[:direction_tolerance])
       else
-        loss = Function.alloc(@loss, guess.size)
-        loss.set_params(@constants)
+        function = Function.alloc(@function, guess.size)
+        function.set_params(@constants)
         minimizer = FMinimizer.alloc("nmsimplex", guess.size)
         ss = Vector.alloc(guess.size)
         ss.set_all(@params[:step_size])
-        minimizer.set(loss, Vector.alloc(*guess), ss)
+        minimizer.set(function, Vector.alloc(*guess), ss)
       end
       minimizer
     end
 
     def get_gsl_result(minimizer)
-      if @params[:loss_gradient]
+      if @params[:function_gradient]
         {
           minimum_f:  minimizer.f,
         }

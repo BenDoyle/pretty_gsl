@@ -3,7 +3,7 @@ require 'test_helper'
 class MinimizerTest < Test::Unit::TestCase
   include PrettyGSL
   def setup
-    @loss = Proc.new do |variables, constants|
+    @function = Proc.new do |variables, constants|
       x = variables[0]
       y = variables[1]
       p0 = constants[0]
@@ -11,7 +11,7 @@ class MinimizerTest < Test::Unit::TestCase
       10.0 * (x - p0) * (x - p0) + 20.0 * (y - p1) * (y - p1) + 30.0
     end
 
-    @loss_gradient = Proc.new do |variables, constants, gradient_components|
+    @function_gradient = Proc.new do |variables, constants, gradient_components|
       x = variables[0]
       y = variables[1]
       p0 = constants[0]
@@ -25,11 +25,11 @@ class MinimizerTest < Test::Unit::TestCase
   end
 
   def test_with_gradient
-    assert_not_nil Minimizer.new(@loss, @constants, loss_gradient: @loss_gradient).minimize(*@guess)
+    assert_not_nil Minimizer.new(@function, @constants, function_gradient: @function_gradient).minimize(*@guess)
   end
 
   def test_without_gradient
-    assert_not_nil Minimizer.new(@loss, @constants).minimize(*@guess)
+    assert_not_nil Minimizer.new(@function, @constants).minimize(*@guess)
   end
 
 end
