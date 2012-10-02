@@ -1,2 +1,2 @@
 require 'test/unit'
-require 'minimize'
+require 'pretty_gsl'

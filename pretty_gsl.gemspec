@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/minimize/version', __FILE__)
+require File.expand_path('../lib/pretty_gsl/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Ben Doyle"]
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "pretty_gsl"
   gem.require_paths = ["lib"]
   gem.version       = PrettyGSL::VERSION
+  
+  gem.add_runtime_dependency "gsl"
 end

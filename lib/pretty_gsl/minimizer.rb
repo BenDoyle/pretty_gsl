@@ -1,9 +1,8 @@
 module PrettyGSL
-  class Minimize
+  class Minimizer
     include GSL
     include GSL::MultiMin
 
-    attr_accessor :verbose
     attr_reader :result
 
     def initialize(loss, constants, options = {})
@@ -15,7 +14,7 @@ module PrettyGSL
         direction_tolerance:          1e-4, # the tolerance for errors in the direction of line minimization
         absolute_gradient_tolerance:  1e-3, # halt if the magnetude of the gradient falls below this value
       }.merge(options)
-      @result    = nil
+      @result  = nil
       self
     end
 

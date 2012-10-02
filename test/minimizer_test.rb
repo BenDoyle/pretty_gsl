@@ -1,6 +1,7 @@
 require 'test_helper'
 
-class MinimizeTest < Test::Unit::TestCase
+class MinimizerTest < Test::Unit::TestCase
+  include PrettyGSL
   def setup
     @loss = Proc.new do |variables, constants|
       x = variables[0]
@@ -24,11 +25,11 @@ class MinimizeTest < Test::Unit::TestCase
   end
 
   def test_with_gradient
-    assert_not_nil Minimize.new(@loss, @constants, loss_gradient: @loss_gradient).minimize(*@guess)
+    assert_not_nil Minimizer.new(@loss, @constants, loss_gradient: @loss_gradient).minimize(*@guess)
   end
 
   def test_without_gradient
-    assert_not_nil Minimize.new(@loss, @constants).minimize(*@guess)
+    assert_not_nil Minimizer.new(@loss, @constants).minimize(*@guess)
   end
 
 end
