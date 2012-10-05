@@ -13,8 +13,10 @@ module PrettyGSL
         step_size:                    0.01, # initial guess of the length scale of the minimiztion steps
         direction_tolerance:          1e-4, # the tolerance for errors in the direction of line minimization
         absolute_gradient_tolerance:  1e-3, # halt if the magnetude of the gradient falls below this value
+        logger:                       nil,  # logger target
       }.merge(options)
       @result  = nil
+      @logger = Logger.new(@params[:logger])
       self
     end
 
@@ -23,6 +25,7 @@ module PrettyGSL
       @params[:max_iterations].times do |iter|
         status = minimizer.iterate
         status = test_gsl_convergence(minimizer)
+        @logger.info minimizer.x.to_a.inspect
         if status != CONTINUE
           @result = {
             success:    status == SUCCESS,

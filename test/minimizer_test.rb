@@ -29,7 +29,7 @@ class MinimizerTest < Test::Unit::TestCase
   end
 
   def test_without_gradient
-    assert_not_nil Minimizer.new(@function, @constants).minimize(*@guess)
+    assert_not_nil Minimizer.new(@function, @constants, logger: STDOUT).minimize(*@guess)
   end
 
 end
